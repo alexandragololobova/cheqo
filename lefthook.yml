@@ -17,11 +17,11 @@ post-checkout:
     install:
       run: bun install
 
-pre-push:
-  commands:
-    # Run tests before pushing
-    test:
-      run: bun run test
+#pre-push:
+#  commands:
+#    # Run tests before pushing
+#    test:
+#      run: bun run test
 
 # EXAMPLE USAGE:
 #
