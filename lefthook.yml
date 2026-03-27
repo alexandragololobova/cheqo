@@ -3,7 +3,7 @@ pre-commit:
     # Typechecking MUST pass
     typecheck:
       glob: "*.{ts,tsx,d.ts,js,jsx,cjs,mjs}"
-      run: bun run check:types
+      run: bun --filter='./apps/*' --filter='./packages/*' run check:types
 
     # Autofix formatting issues
     fix:
