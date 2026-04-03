@@ -7,7 +7,7 @@ import { UploadPage } from "./pages/UploadPage.tsx";
 
 function App() {
 	return (
-		<div className={"min-h-screen bg-[#13131A"}>
+		<div className={"min-h-screen bg-[#13131A]"}>
 			<Navbar />
 			<main className={"mx-auto max-w-7xl px-6 py-8"}>
 				<Routes>

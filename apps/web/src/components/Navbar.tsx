@@ -4,7 +4,7 @@ import { LogoMark } from "./LogoMark.tsx";
 
 export function Navbar() {
 	return (
-		<nav className={"bg-[#0F0F14] border-b border-[#2A2A38"}>
+		<nav className={"bg-[#0F0F14] border-b border-[#2A2A38]"}>
 			<div
 				className={"mx-auto max-w-7xl px-6 grid grid-cols-3 items-center h-16"}
 			>
