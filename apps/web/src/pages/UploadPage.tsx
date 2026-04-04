@@ -29,7 +29,7 @@ function Hero() {
 function Dropzone() {
 	return (
 		<div className="w-full max-w-2xl border-2 border-dashed border-[#7B6FFF]/50 rounded-2xl bg-[#1C1C27] p-16 flex flex-col items-center gap-6 hover:border-[#7B6FFF]/80 transition-all cursor-pointer shadow-[0_0_60px_-10px_rgba(123,111,255,0.3)] hover:shadow-[0_0_80px_-10px_rgba(123,111,255,0.5)]">
-			<div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(123,111,255,0.5)] bg-gradient-to-br from-[#9B8FFF] to-[#6B5FEF]">
+			<div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(123,111,255,0.5)] bg-linear-to-br from-[#9B8FFF] to-[#6B5FEF]">
 				<svg
 					role="img"
 					aria-label="Upload file"
@@ -57,7 +57,7 @@ function Dropzone() {
 			</div>
 			<button
 				type="button"
-				className="px-6 py-2.5 text-white text-sm font-medium rounded-lg transition-all shadow-[0_0_20px_rgba(123,111,255,0.4)] bg-gradient-to-br from-[#9B8FFF] to-[#6B5FEF] hover:shadow-[0_0_30px_rgba(123,111,255,0.6)] hover:from-[#A89FFF] hover:to-[#7B6FFF]"
+				className="px-6 py-2.5 text-white text-sm font-medium rounded-lg transition-all shadow-[0_0_20px_rgba(123,111,255,0.4)] bg-linear-to-br from-[#9B8FFF] to-[#6B5FEF] hover:shadow-[0_0_30px_rgba(123,111,255,0.6)] hover:from-[#A89FFF] hover:to-[#7B6FFF]"
 			>
 				Browse files
 			</button>
