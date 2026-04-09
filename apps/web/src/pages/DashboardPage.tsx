@@ -162,6 +162,42 @@ export function DashboardPage() {
 					</AreaChart>
 				</ResponsiveContainer>
 			</div>
+
+			{/* Bottom row */}
+			<div className="grid grid-cols-2 gap-4">
+				{/* Spending by tag */}
+				<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6 flex flex-col gap-5">
+					<div className="flex items-center gap-2">
+						<svg
+							role="img"
+							aria-label="Tag"
+							width="16"
+							height="16"
+							viewBox="0 0 22 22"
+							fill="none"
+							stroke="#9CA3AF"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+							<line x1="7" y1="7" x2="7.01" y2="7" />
+						</svg>
+						<h2 className="text-white font-semibold">Spending by Tag</h2>
+					</div>
+					<div className="flex flex-col gap-4">
+						{TAG_SPENDING.map((item) => (
+							<TagBar
+								key={item.tag}
+								tag={item.tag}
+								amount={item.amount}
+								color={item.color}
+								max={MAX_TAG_AMOUNT}
+							/>
+						))}
+					</div>
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -207,6 +243,33 @@ function StatCard({ icon, iconBg, accentColor, value, label }: StatCardProps) {
 				<p className="text-[#6B7280] text-sm mt-0.5">{label}</p>
 			</div>
 		</button>
+	);
+}
+
+type TagBarProps = {
+	tag: string;
+	amount: number;
+	color: string;
+	max: number;
+};
+
+function TagBar({ tag, amount, color, max }: TagBarProps) {
+	const percent = (amount / max) * 100;
+	return (
+		<div className="flex flex-col gap-1.5">
+			<div className="flex items-center justify-between">
+				<span className="text-[#9CA3AF] text-sm">{tag}</span>
+				<span className="text-white text-sm font-medium">
+					${amount.toFixed(2)}
+				</span>
+			</div>
+			<div className="h-1.5 rounded-full bg-[#2A2A38]">
+				<div
+					className="h-1.5 rounded-full transition-all"
+					style={{ width: `${percent}%`, backgroundColor: color }}
+				/>
+			</div>
+		</div>
 	);
 }
 
