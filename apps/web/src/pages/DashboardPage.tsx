@@ -197,6 +197,21 @@ export function DashboardPage() {
 						))}
 					</div>
 				</div>
+
+				{/* Recent Receipts */}
+				<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6 flex flex-col gap-4">
+					<h2 className="text-white font-semibold">Recent Receipts</h2>
+					<div className="flex flex-col gap-2">
+						{RECENT_RECEIPTS.map((receipt) => (
+							<RecentReceiptRow
+								key={receipt.vendor + receipt.date + receipt.total}
+								vendor={receipt.vendor}
+								date={receipt.date}
+								total={receipt.total}
+							/>
+						))}
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -269,6 +284,26 @@ function TagBar({ tag, amount, color, max }: TagBarProps) {
 					style={{ width: `${percent}%`, backgroundColor: color }}
 				/>
 			</div>
+		</div>
+	);
+}
+
+type RecentReceiptRowProps = {
+	vendor: string;
+	date: string;
+	total: number;
+};
+
+function RecentReceiptRow({ vendor, date, total }: RecentReceiptRowProps) {
+	return (
+		<div className="flex items-center justify-between px-4 py-3 bg-[#16161F] rounded-xl hover:bg-[#1E1E2E] transition-colors">
+			<div>
+				<p className="text-white text-sm font-medium">{vendor}</p>
+				<p className="text-[#6B7280] text-xs mt-0.5">{date}</p>
+			</div>
+			<p className="text-[#7B6FFF] font-semibold text-sm">
+				${total.toFixed(2)}
+			</p>
 		</div>
 	);
 }
