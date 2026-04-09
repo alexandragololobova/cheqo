@@ -37,6 +37,27 @@ const RECENT_RECEIPTS = [
 
 const MAX_TAG_AMOUNT = Math.max(...TAG_SPENDING.map((entry) => entry.amount));
 
+// custom chart tooltip
+
+type TooltipProps = {
+	active?: boolean;
+	payload?: { value: number }[];
+	label?: string;
+};
+
+function ChartTooltip({ active, payload, label }: TooltipProps) {
+	if (!active || !payload || payload.length === 0) return null;
+
+	return (
+		<div className="px-3 py-2 bg-[#1C1C27] border border-[#2A2A38] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+			<p className="text-[#9CA3AF] text-xs">{label}</p>
+			<p className="text-[#7B6FFF] text-sm font-semibold mt-0.5">
+				${payload[0]?.value.toFixed(2)}
+			</p>
+		</div>
+	);
+}
+
 export function DashboardPage() {
 	return (
 		<div className="flex flex-col gap-6">
@@ -91,6 +112,55 @@ export function DashboardPage() {
 					value="$104.47"
 					label="Average per Receipt"
 				/>
+			</div>
+
+			{/* Daily spending chart */}
+			<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6">
+				<h2 className="text-white font-semibold mb-6">Daily Spending</h2>
+				<ResponsiveContainer width="100%" height={280}>
+					<AreaChart
+						data={DAILY_SPENDING}
+						margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+					>
+						<defs>
+							<linearGradient id="spendGradient" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="5%" stopColor="#7B6FFF" stopOpacity={0.3} />
+								<stop offset="95%" stopColor="#7B6FFF" stopOpacity={0} />
+							</linearGradient>
+						</defs>
+						<CartesianGrid
+							stroke={"#2A2A38"}
+							strokeDasharray="3 3"
+							vertical={false}
+						/>
+						<XAxis
+							dataKey="date"
+							stroke={"#6B7280"}
+							tick={{ fill: "#6B7280", fontSize: 12 }}
+							axisLine={false}
+							tickLine={true}
+						/>
+						<YAxis
+							tick={{ fill: "#6B7280", fontSize: 12 }}
+							axisLine={{ stroke: "#6B7280", strokeWidth: "0.1" }}
+							tickLine={true}
+						/>
+						<Tooltip content={<ChartTooltip />} />
+						<Area
+							type="monotone"
+							dataKey="amount"
+							stroke="#7B6FFF"
+							fill="url(#spendGradient)"
+							dot={{ fill: "#7B6FFF", r: 4, strokeWidth: 0 }}
+							activeDot={{
+								fill: "#7B6FFF",
+								r: 6,
+								strokeWidth: 2,
+								stroke: "#D9DFE7",
+							}}
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
 			</div>
 		</div>
 	);
