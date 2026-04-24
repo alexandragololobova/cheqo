@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Navbar } from "./components/Navbar.tsx";
 import { StatusBar } from "./components/StatusBar.tsx";
 import { DashboardPage } from "./pages/DashboardPage.tsx";
+import { ReceiptDetailPage } from "./pages/ReceiptDetailPage.tsx";
 //import { ReceiptDetailPage } from "./pages/ReceiptDetailPage.tsx";
 import { ReceiptsPage } from "./pages/ReceiptsPage.tsx";
 import { UploadPage } from "./pages/UploadPage.tsx";
@@ -68,7 +69,7 @@ function AppShell() {
 					<Route path="/" element={<UploadPage />} />
 					<Route path="/receipts" element={<ReceiptsPage />} />
 					<Route path="/dashboard" element={<DashboardPage />} />
-					{/*<Route path="/receipts/:id" element={<ReceiptDetailPage />} /> */}
+					<Route path="/receipts/:id" element={<ReceiptDetailPage />} />
 				</Routes>
 			</main>
 			<StatusBar mode={config.mode} shortcuts={config.shortcuts} />
