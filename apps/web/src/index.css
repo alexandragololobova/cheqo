@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background-color: #F5F2EA;
+    color: #14130F;
+    margin: 0;
+}
+
+/* Subtle graph-paper grid on main content areas */
+.bg-grid {
+    background-image:
+            linear-gradient(rgba(20, 19, 15, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(20, 19, 15, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+.blink {
+    animation: blink 1s step-end infinite;
+}
+
+/* Blinking dot animation (status bar) */
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+}
+
+.pulse-dot {
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}

@@ -1,52 +1,17 @@
-type Props = {
-	height: number;
-	textColor?: string;
-	accentColor?: string;
-};
-
-export function Logo({
-	height = 36,
-	textColor = "#F0EFEA",
-	accentColor = "#7B6FFF",
-}: Props) {
+export function Logo() {
 	return (
-		<svg
-			height={height}
-			viewBox="0 0 480 155"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<title>Cheqo Logo</title>
-			<text
-				x="240"
-				y="112"
-				textAnchor="middle"
-				fontFamily="'Inter', 'Helvetica Neue', Arial, sans-serif"
-				fontWeight="800"
-				fontSize="112"
-				letterSpacing="-6"
-				fill={textColor}
+		<div className="flex items-center gap-0 select-none">
+			<span
+				style={{ fontFamily: "'JetBrains Mono', monospace" }}
+				className="text-[#14130F] font-bold text-lg tracking-tight leading-none"
 			>
 				cheqo
-			</text>
-			<line
-				x1="350"
-				y1="35"
-				x2="405"
-				y2="125"
-				stroke={textColor}
-				strokeWidth="35"
-				strokeLinecap="round"
+			</span>
+			{/* Blinking orange block caret */}
+			<span
+				className="blink inline-block w-[9px] h-[18px] bg-[#FF5A00] ml-[2px] align-middle"
+				aria-hidden="true"
 			/>
-			<line
-				x1="350"
-				y1="35"
-				x2="405"
-				y2="125"
-				stroke={accentColor}
-				strokeWidth="22"
-				strokeLinecap="round"
-			/>
-		</svg>
+		</div>
 	);
 }

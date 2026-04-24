@@ -9,16 +9,16 @@
 		]
 	},
 	"scripts": {
-		"dev:web": "bun --filter='@cheqo/web' run dev",
-		"dev:api": "bun --filter='@cheqo/api' run dev",
+		"dev:web": "bun --filter=\"@cheqo/web\" run dev",
+		"dev:api": "bun --filter=\"@cheqo/api\" run dev",
 		"setup": "bun install && lefthook install",
 		"autofix": "biome check --write",
 		"check": "bun run check:lint && bun run check:format && bun run check:types",
 		"check:lint": "bunx biome lint --error-on-warnings .",
 		"check:format": "bunx biome format .",
 		"check:types": "tsc --noEmit",
-		"test": "bun --filter='*' run test",
-		"test:e2e": "bun --filter='*' run test:e2e"
+		"test": "bun --filter=\"*\" run test",
+		"test:e2e": "bun --filter=\"*\" run test:e2e"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.9",
