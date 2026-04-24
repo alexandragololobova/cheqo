@@ -1,107 +1,135 @@
 export function UploadPage() {
 	return (
-		<div className="flex flex-col items-center py-16 gap-12">
-			<Hero />
+		<div className="flex flex-col gap-8">
+			<PageHeader />
 			<Dropzone />
-			<Features />
+			<SystemStatus />
 		</div>
 	);
 }
 
-function Hero() {
+function PageHeader() {
 	return (
-		<div className="flex flex-col items-center gap-4 text-center">
-			<div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#7B6FFF]/10 border border-[#7B6FFF]/20 shadow-[0_0_20px_rgba(123,111,255,0.2)]">
-				<span className="text-[#7B6FFF] text-xs font-medium">
-					✦ AI-powered receipt extraction
-				</span>
-			</div>
-			<h1 className="text-5xl font-bold text-white tracking-tight">
-				Drop your receipt here
+		<div className="flex flex-col gap-1 border-l-4 border-[#FF5A00] pl-4">
+			<h1 className="text-2xl font-bold tracking-widest uppercase text-[#14130F]">
+				INGEST_DATA
 			</h1>
-			<p className="text-[#9CA3AF] text-lg max-w-md">
-				Upload a photo or PDF and let AI extract all the details
-			</p>
+			<p className="text-sm text-[#6B6660]">Upload receipt images or PDFs</p>
 		</div>
 	);
 }
 
 function Dropzone() {
 	return (
-		<div className="w-full max-w-2xl border-2 border-dashed border-[#7B6FFF]/50 rounded-2xl bg-[#1C1C27] p-16 flex flex-col items-center gap-6 hover:border-[#7B6FFF]/80 transition-all cursor-pointer shadow-[0_0_60px_-10px_rgba(123,111,255,0.3)] hover:shadow-[0_0_80px_-10px_rgba(123,111,255,0.5)]">
-			<div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(123,111,255,0.5)] bg-linear-to-br from-[#9B8FFF] to-[#6B5FEF]">
-				<svg
-					role="img"
-					aria-label="Upload file"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="white"
-					strokeWidth="2"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-				>
-					<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-					<polyline points="17 8 12 3 7 8" />
-					<line x1="12" y1="3" x2="12" y2="15" />
-				</svg>
+		<div className="relative">
+			<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] bg-[#14130F]" />
+			<div className="relative border-2 border-dashed border-[#FF5A00] bg-white p-16 flex flex-col items-center gap-6">
+				{/* Upload icon tile */}
+				<div className="relative">
+					<div className="absolute inset-0 translate-x-[4px] translate-y-[4px] bg-[#14130F]" />
+					<div className="relative w-16 h-16 border-2 border-[#14130F] bg-white flex items-center justify-center">
+						<svg
+							role="img"
+							aria-label="Upload file"
+							width="28"
+							height="28"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="#FF5A00"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<polyline points="16 16 12 12 8 16" />
+							<line x1="12" y1="12" x2="12" y2="21" />
+							<path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
+						</svg>
+					</div>
+				</div>
+
+				{/* Text */}
+				<div className="flex flex-col items-center gap-2 text-center">
+					<p className="text-[#14130F] font-bold text-lg tracking-wide">
+						Drop files here to upload
+					</p>
+					<p className="text-[#6B6660] text-sm">JPEG, PNG, PDF up to 10MB</p>
+				</div>
+
+				{/* CTA row */}
+				<div className="flex items-center gap-4">
+					{/* Primary button */}
+					<div className="relative">
+						<div className="absolute inset-0 translate-x-[3px] translate-y-[3px] bg-[#14130F]" />
+						<button
+							type="button"
+							className="relative px-6 py-2.5 bg-[#14130F] text-white text-sm font-bold tracking-widest uppercase border-2 border-[#14130F] hover:bg-[#FF5A00] hover:border-[#FF5A00] transition-colors"
+						>
+							BROWSE FILES
+						</button>
+					</div>
+
+					{/* Keyboard hint */}
+					<div className="flex items-center gap-2 text-sm text-[#6B6660]">
+						<span>OR press</span>
+						<kbd className="px-2 py-1 border-2 border-[#14130F] text-xs font-bold bg-white shadow-[2px_2px_0px_#14130F]">
+							U
+						</kbd>
+						<span>to upload</span>
+					</div>
+				</div>
 			</div>
-			<div className="flex flex-col items-center gap-2 text-center">
-				<p className="text-white font-medium text-lg">
-					Choose a file or drag it here
-				</p>
-				<p className="text-[#6B7280] text-sm">
-					Supports JPG, PNG, PDF · Max 10MB
-				</p>
-			</div>
-			<button
-				type="button"
-				className="px-6 py-2.5 text-white text-sm font-medium rounded-lg transition-all shadow-[0_0_20px_rgba(123,111,255,0.4)] bg-linear-to-br from-[#9B8FFF] to-[#6B5FEF] hover:shadow-[0_0_30px_rgba(123,111,255,0.6)] hover:from-[#A89FFF] hover:to-[#7B6FFF]"
-			>
-				Browse files
-			</button>
 		</div>
 	);
 }
 
-function Features() {
+function SystemStatus() {
 	return (
-		<div className="grid grid-cols-3 gap-4 w-full max-w-2xl">
-			<FeatureCard
-				icon="⚡"
-				title="AI Extraction"
-				description="Automatically extract vendor, date, total, and line-items"
-			/>
-			<FeatureCard
-				icon="🔍"
-				title="Smart Search"
-				description="Find receipts instantly by vendor, amount, date, or custom tags"
-			/>
-			<FeatureCard
-				icon="📤"
-				title="Easy Export"
-				description="Export your data to CSV or JSON"
-			/>
-		</div>
-	);
-}
+		<div className="relative">
+			<div className="absolute inset-0 translate-x-[6px] translate-y-[6px] bg-[#14130F]" />
+			<div className="relative border-2 border-[#14130F] bg-[#14130F] p-6 flex flex-col gap-3">
+				{/* Header */}
+				<div className="flex items-center gap-2">
+					<svg
+						role="img"
+						aria-label="System"
+						width="14"
+						height="14"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="#FF5A00"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+					>
+						<rect x="2" y="3" width="20" height="14" rx="2" />
+						<path d="M8 21h8M12 17v4" />
+					</svg>
+					<span className="text-[#FF5A00] text-xs font-bold tracking-widest">
+						⌘ SYSTEM_STATUS
+					</span>
+				</div>
 
-type FeatureCardProps = {
-	icon: string;
-	title: string;
-	description: string;
-};
+				{/* Log lines */}
+				<div className="flex flex-col gap-2 font-mono">
+					<div className="flex gap-3 text-xs">
+						<span className="text-[#FF5A00] font-bold shrink-0">[INFO]</span>
+						<span className="text-[#9B9690]">
+							Cheqo AI Engine initialized. Ready for processing.
+						</span>
+					</div>
+					<div className="flex gap-3 text-xs">
+						<span className="text-[#FF5A00] font-bold shrink-0">[INFO]</span>
+						<span className="text-[#9B9690]">
+							Storage capacity: 4.2GB available.
+						</span>
+					</div>
+				</div>
 
-function FeatureCard({ icon, title, description }: FeatureCardProps) {
-	return (
-		<div className="bg-[#1C1C27] rounded-xl p-5 flex flex-col gap-3 border border-[#2A2A38]">
-			<div className="w-10 h-10 rounded-lg bg-[#7B6FFF]/15 border border-[#7B6FFF]/20 flex items-center justify-center shadow-[0_0_12px_rgba(123,111,255,0.15)]">
-				<span className="text-lg">{icon}</span>
-			</div>
-			<div className="flex flex-col gap-1">
-				<p className="text-white text-sm font-medium">{title}</p>
-				<p className="text-[#6B7280] text-xs">{description}</p>
+				{/* Prompt line */}
+				<div className="flex items-center gap-1 mt-1">
+					<span className="text-[#FF5A00] text-sm font-bold">❯</span>
+					<span className="blink inline-block w-[8px] h-[14px] bg-[#F5F2EA]" />
+				</div>
 			</div>
 		</div>
 	);
