@@ -1,121 +1,84 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import "./App.css";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { Navbar } from "./components/Navbar.tsx";
+import { StatusBar } from "./components/StatusBar.tsx";
+import { DashboardPage } from "./pages/DashboardPage.tsx";
+import { ReceiptDetailPage } from "./pages/ReceiptDetailPage.tsx";
+//import { ReceiptDetailPage } from "./pages/ReceiptDetailPage.tsx";
+import { ReceiptsPage } from "./pages/ReceiptsPage.tsx";
+import { UploadPage } from "./pages/UploadPage.tsx";
 
-function App() {
-  const [count, setCount] = useState(0)
+function AppShell() {
+	const location = useLocation();
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+	const statusConfig: Record<
+		string,
+		{ mode: string; shortcuts: { key: string; label: string }[] }
+	> = {
+		"/": {
+			mode: "INGEST",
+			shortcuts: [
+				{ key: "U", label: "Upload" },
+				{ key: "/", label: "Search" },
+				{ key: "?", label: "Help" },
+			],
+		},
+		"/dashboard": {
+			mode: "ANALYTICS",
+			shortcuts: [
+				{ key: "1-5", label: "Filter Range" },
+				{ key: "E", label: "Export" },
+				{ key: "/", label: "Search" },
+			],
+		},
+		"/receipts": {
+			mode: "RECEIPTS",
+			shortcuts: [
+				{ key: "/", label: "Search" },
+				{ key: "F", label: "Filter" },
+				{ key: "E", label: "Export" },
+			],
+		},
+	};
 
-      <div className="ticks"></div>
+	const routeKey = location.pathname.startsWith("/receipts/")
+		? "/receipts/:id"
+		: location.pathname;
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+	const detailConfig = {
+		mode: "EDIT",
+		shortcuts: [
+			{ key: "ESC", label: "Discard" },
+			{ key: "⌘S", label: "Save Changes" },
+		],
+	};
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+	const config =
+		routeKey === "/receipts/:id"
+			? detailConfig
+			: (statusConfig[routeKey] ?? { mode: "UNKNOWN", shortcuts: [] });
+
+	return (
+		<div
+			className="min-h-screen bg-[#F5F2EA]"
+			style={{ paddingBottom: "2rem" }}
+		>
+			<Navbar />
+			<main className="bg-grid mx-auto max-w-7xl px-6 py-8">
+				<Routes>
+					<Route path="/" element={<UploadPage />} />
+					<Route path="/receipts" element={<ReceiptsPage />} />
+					<Route path="/dashboard" element={<DashboardPage />} />
+					<Route path="/receipts/:id" element={<ReceiptDetailPage />} />
+				</Routes>
+			</main>
+			<StatusBar mode={config.mode} shortcuts={config.shortcuts} />
+		</div>
+	);
 }
 
-export default App
+function App() {
+	return <AppShell />;
+}
+
+export default App;
