@@ -1,32 +1,36 @@
 {
-  "name": "@cheqo/monorepo",
-  "private": true,
-  "type": "module",
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "packages/*"
-    ]
-  },
-  "scripts": {
-    "dev:web": "bun --filter='@cheqo/web' run dev",
-    "dev:api": "bun --filter='@cheqo/api' run dev",
-    "setup": "bun install && lefthook install",
-    "autofix": "biome check --write",
-    "check": "bun run check:lint && bun run check:format && bun run check:types",
-    "check:lint": "bunx biome lint --error-on-warnings .",
-    "check:format": "bunx biome format .",
-    "check:types": "bun --filter='*' run check",
-    "test": "bun --filter='*' run test",
-    "test:e2e": "bun --filter='*' run test:e2e"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.4.9",
-    "@types/bun": "^1.3.11",
-    "lefthook": "^2.1.4"
-  },
-  "engines": {
-    "bun": ">=1.3.4"
-  },
-  "packageManager": "bun@1.3.4"
+	"name": "@cheqo/monorepo",
+	"private": true,
+	"type": "module",
+	"workspaces": {
+		"packages": [
+			"apps/*",
+			"packages/*"
+		]
+	},
+	"scripts": {
+		"dev:web": "bun --filter=\"@cheqo/web\" run dev",
+		"dev:api": "bun --filter=\"@cheqo/api\" run dev",
+		"setup": "bun install && lefthook install",
+		"autofix": "biome check --write",
+		"check": "bun run check:lint && bun run check:format && bun run check:types",
+		"check:lint": "bunx biome lint --error-on-warnings .",
+		"check:format": "bunx biome format .",
+		"check:types": "tsc --noEmit",
+		"test": "bun --filter=\"*\" run test",
+		"test:e2e": "bun --filter=\"*\" run test:e2e"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.9",
+		"@types/bun": "^1.3.11",
+		"lefthook": "^2.1.4",
+		"typescript": "^6.0.2"
+	},
+	"engines": {
+		"bun": ">=1.3.4"
+	},
+	"packageManager": "bun@1.3.4",
+	"dependencies": {
+		"recharts": "^3.8.1"
+	}
 }

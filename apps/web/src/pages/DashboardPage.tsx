@@ -1,0 +1,372 @@
+import { type ReactNode, useState } from "react";
+import {
+	Area,
+	AreaChart,
+	CartesianGrid,
+	ResponsiveContainer,
+	Tooltip,
+	XAxis,
+	YAxis,
+} from "recharts";
+
+const DAILY_SPENDING = [
+	{ date: "Mar 14", amount: 0 },
+	{ date: "Mar 16", amount: 58.32 },
+	{ date: "Mar 18", amount: 234.56 },
+	{ date: "Mar 20", amount: 12.75 },
+	{ date: "Mar 22", amount: 89.23 },
+	{ date: "Mar 24", amount: 127.48 },
+	{ date: "Mar 26", amount: 58.32 },
+];
+
+const TAG_SPENDING = [
+	{ tag: "Business", amount: 323.79, color: "#7B6FFF" },
+	{ tag: "Groceries", amount: 127.48, color: "#10B981" },
+	{ tag: "Transportation", amount: 58.32, color: "#F59E0B" },
+	{ tag: "Food", amount: 140.23, color: "#38BDF8" },
+	{ tag: "Supplies", amount: 234.56, color: "#F43F5E" },
+];
+
+const RECENT_RECEIPTS = [
+	{ vendor: "Whole Foods Market", date: "March 24, 2026", total: 127.48 },
+	{ vendor: "Amazon Web Services", date: "March 22, 2026", total: 89.23 },
+	{ vendor: "Starbucks Coffee", date: "March 20, 2026", total: 12.75 },
+	{ vendor: "Office Depot", date: "March 18, 2026", total: 234.56 },
+	{ vendor: "Shell Gas Station", date: "March 16, 2026", total: 58.32 },
+];
+
+const MAX_TAG_AMOUNT = Math.max(...TAG_SPENDING.map((entry) => entry.amount));
+
+// custom chart tooltip
+
+type TooltipProps = {
+	active?: boolean;
+	payload?: { value: number }[];
+	label?: string;
+};
+
+function ChartTooltip({ active, payload, label }: TooltipProps) {
+	if (!active || !payload || payload.length === 0) return null;
+
+	return (
+		<div className="px-3 py-2 bg-[#1C1C27] border border-[#2A2A38] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+			<p className="text-[#9CA3AF] text-xs">{label}</p>
+			<p className="text-[#7B6FFF] text-sm font-semibold mt-0.5">
+				${payload[0]?.value.toFixed(2)}
+			</p>
+		</div>
+	);
+}
+
+export function DashboardPage() {
+	return (
+		<div className="flex flex-col gap-6">
+			{/* Header */}
+			<div className="flex items-center justify-between">
+				<h1 className="text-2xl font-bold text-white">Dashboard</h1>
+				<button
+					type="button"
+					className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1C1C27] border border-[#2A2A38] text-[#D4D7DC] text-sm hover:text-white hover:border-[#7B6FFF] transition-colors"
+				>
+					<svg
+						role="img"
+						aria-label="Calendar"
+						width="14"
+						height="14"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						strokeWidth="2"
+						strokeLinecap="round"
+						strokeLinejoin="round"
+					>
+						<rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+						<line x1="16" y1="2" x2="16" y2="6" />
+						<line x1="8" y1="2" x2="8" y2="6" />
+						<line x1="3" y1="10" x2="21" y2="10" />
+					</svg>
+					March 2026
+				</button>
+			</div>
+
+			{/* Stat card */}
+			<div className="grid grid-cols-3 gap-6">
+				<StatCard
+					icon={<DollarIcon />}
+					iconBg="from-[#7B6FFF] to-[#5B4FD4]"
+					accentColor="#7B6FFF"
+					value="$522.34"
+					label="Total Spent"
+				/>
+				<StatCard
+					icon={<ReceiptIcon />}
+					iconBg="from-[#10B981] to-[#059669]"
+					accentColor="#10B981"
+					value="5"
+					label="Receipts"
+				/>
+				<StatCard
+					icon={<TrendIcon />}
+					iconBg="from-[#F59E0B] to-[#D97706]"
+					accentColor="#F59E0B"
+					value="$104.47"
+					label="Average per Receipt"
+				/>
+			</div>
+
+			{/* Daily spending chart */}
+			<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6">
+				<h2 className="text-white font-semibold mb-6">Daily Spending</h2>
+				<ResponsiveContainer width="100%" height={280}>
+					<AreaChart
+						data={DAILY_SPENDING}
+						margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+					>
+						<defs>
+							<linearGradient id="spendGradient" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="5%" stopColor="#7B6FFF" stopOpacity={0.3} />
+								<stop offset="95%" stopColor="#7B6FFF" stopOpacity={0} />
+							</linearGradient>
+						</defs>
+						<CartesianGrid
+							stroke={"#2A2A38"}
+							strokeDasharray="3 3"
+							vertical={false}
+						/>
+						<XAxis
+							dataKey="date"
+							stroke={"#6B7280"}
+							tick={{ fill: "#6B7280", fontSize: 12 }}
+							axisLine={false}
+							tickLine={true}
+						/>
+						<YAxis
+							tick={{ fill: "#6B7280", fontSize: 12 }}
+							axisLine={{ stroke: "#6B7280", strokeWidth: "0.1" }}
+							tickLine={true}
+						/>
+						<Tooltip content={<ChartTooltip />} />
+						<Area
+							type="monotone"
+							dataKey="amount"
+							stroke="#7B6FFF"
+							fill="url(#spendGradient)"
+							dot={{ fill: "#7B6FFF", r: 4, strokeWidth: 0 }}
+							activeDot={{
+								fill: "#7B6FFF",
+								r: 6,
+								strokeWidth: 2,
+								stroke: "#D9DFE7",
+							}}
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</div>
+
+			{/* Bottom row */}
+			<div className="grid grid-cols-2 gap-4">
+				{/* Spending by tag */}
+				<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6 flex flex-col gap-5">
+					<div className="flex items-center gap-2">
+						<svg
+							role="img"
+							aria-label="Tag"
+							width="16"
+							height="16"
+							viewBox="0 0 22 22"
+							fill="none"
+							stroke="#9CA3AF"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+							<line x1="7" y1="7" x2="7.01" y2="7" />
+						</svg>
+						<h2 className="text-white font-semibold">Spending by Tag</h2>
+					</div>
+					<div className="flex flex-col gap-4">
+						{TAG_SPENDING.map((item) => (
+							<TagBar
+								key={item.tag}
+								tag={item.tag}
+								amount={item.amount}
+								color={item.color}
+								max={MAX_TAG_AMOUNT}
+							/>
+						))}
+					</div>
+				</div>
+
+				{/* Recent Receipts */}
+				<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6 flex flex-col gap-4">
+					<h2 className="text-white font-semibold">Recent Receipts</h2>
+					<div className="flex flex-col gap-2">
+						{RECENT_RECEIPTS.map((receipt) => (
+							<RecentReceiptRow
+								key={receipt.vendor + receipt.date + receipt.total}
+								vendor={receipt.vendor}
+								date={receipt.date}
+								total={receipt.total}
+							/>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+// sub components
+
+type StatCardProps = {
+	icon: ReactNode;
+	iconBg: string;
+	accentColor: string;
+	value: string;
+	label: string;
+};
+
+function StatCard({ icon, iconBg, accentColor, value, label }: StatCardProps) {
+	const [isHovered, setIsHovered] = useState(false);
+
+	return (
+		<button
+			type="button"
+			className="relative overflow-hidden bg-[#1C1C27] rounded-xl border p-6 flex flex-col gap-4 transition-all group text-left w-full"
+			style={{
+				borderColor: isHovered ? `${accentColor}18` : `${accentColor}15`,
+				boxShadow: isHovered
+					? `0 0 27px -2px ${accentColor}45`
+					: `0 0 15px -2px ${accentColor}35`,
+			}}
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}
+		>
+			<div
+				className="absolute -top-7 -right-6 w-30 h-30 rounded-full blur-2xl pointer-events-none opacity-45 transition-all duration-300 group-hover:scale-150 group-hover:opacity-65"
+				style={{ backgroundColor: `${accentColor}25` }}
+			/>
+			<div
+				className={`relative w-11 h-11 rounded-xl flex items-center justify-center bg-linear-to-br ${iconBg}`}
+				style={{ boxShadow: `0 0 20px ${accentColor}80` }}
+			>
+				{icon}
+			</div>
+			<div className="relative transition-transform duration-300 group-hover:-translate-y-0.5">
+				<p className="text-2xl font-bold text-white">{value}</p>
+				<p className="text-[#6B7280] text-sm mt-0.5">{label}</p>
+			</div>
+		</button>
+	);
+}
+
+type TagBarProps = {
+	tag: string;
+	amount: number;
+	color: string;
+	max: number;
+};
+
+function TagBar({ tag, amount, color, max }: TagBarProps) {
+	const percent = (amount / max) * 100;
+	return (
+		<div className="flex flex-col gap-1.5">
+			<div className="flex items-center justify-between">
+				<span className="text-[#9CA3AF] text-sm">{tag}</span>
+				<span className="text-white text-sm font-medium">
+					${amount.toFixed(2)}
+				</span>
+			</div>
+			<div className="h-1.5 rounded-full bg-[#2A2A38]">
+				<div
+					className="h-1.5 rounded-full transition-all"
+					style={{ width: `${percent}%`, backgroundColor: color }}
+				/>
+			</div>
+		</div>
+	);
+}
+
+type RecentReceiptRowProps = {
+	vendor: string;
+	date: string;
+	total: number;
+};
+
+function RecentReceiptRow({ vendor, date, total }: RecentReceiptRowProps) {
+	return (
+		<div className="flex items-center justify-between px-4 py-3 bg-[#16161F] rounded-xl hover:bg-[#1E1E2E] transition-colors">
+			<div>
+				<p className="text-white text-sm font-medium">{vendor}</p>
+				<p className="text-[#6B7280] text-xs mt-0.5">{date}</p>
+			</div>
+			<p className="text-[#7B6FFF] font-semibold text-sm">
+				${total.toFixed(2)}
+			</p>
+		</div>
+	);
+}
+
+// icon components
+
+function DollarIcon() {
+	return (
+		<svg
+			role="img"
+			aria-label="Dollar"
+			width="20"
+			height="20"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="white"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		>
+			<line x1="12" y1="1" x2="12" y2="23" />
+			<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+		</svg>
+	);
+}
+
+function ReceiptIcon() {
+	return (
+		<svg
+			role="img"
+			aria-label="Receipt"
+			width="20"
+			height="20"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="white"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		>
+			<path d="M14 2H6a2 2 0 0 0-2 3v16l4-2 4 2 4-2 4 2V8z" />
+			<line x1="9" y1="10" x2="15" y2="10" />
+			<line x1="9" y1="14" x2="13" y2="14" />
+		</svg>
+	);
+}
+
+function TrendIcon() {
+	return (
+		<svg
+			role="img"
+			aria-label="Trend"
+			width="20"
+			height="20"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="white"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+		>
+			<polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+			<polyline points="17 6 23 6 23 12" />
+		</svg>
+	);
+}
