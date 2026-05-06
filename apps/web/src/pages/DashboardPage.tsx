@@ -20,19 +20,49 @@ const DAILY_SPENDING = [
 ];
 
 const TAG_SPENDING = [
-	{ tag: "Business", amount: 323.79, color: "#7B6FFF" },
-	{ tag: "Groceries", amount: 127.48, color: "#10B981" },
-	{ tag: "Transportation", amount: 58.32, color: "#F59E0B" },
-	{ tag: "Food", amount: 140.23, color: "#38BDF8" },
-	{ tag: "Supplies", amount: 234.56, color: "#F43F5E" },
+	{ tag: "Business", amount: 323.79, color: "#FF5A00" },
+	{ tag: "Groceries", amount: 127.48, color: "#14130F" },
+	{ tag: "Transportation", amount: 58.32, color: "#14130F" },
+	{ tag: "Food", amount: 140.23, color: "#14130F" },
+	{ tag: "Supplies", amount: 234.56, color: "#14130F" },
 ];
 
 const RECENT_RECEIPTS = [
-	{ vendor: "Whole Foods Market", date: "March 24, 2026", total: 127.48 },
-	{ vendor: "Amazon Web Services", date: "March 22, 2026", total: 89.23 },
-	{ vendor: "Starbucks Coffee", date: "March 20, 2026", total: 12.75 },
-	{ vendor: "Office Depot", date: "March 18, 2026", total: 234.56 },
-	{ vendor: "Shell Gas Station", date: "March 16, 2026", total: 58.32 },
+	{
+		id: "R-1042",
+		vendor: "Whole Foods Market",
+		date: "2026-03-24",
+		amount: 127.48,
+		tags: ["GROCERIES", "FOOD"],
+	},
+	{
+		id: "R-1041",
+		vendor: "Amazon Web Services",
+		date: "2026-03-22",
+		amount: 89.23,
+		tags: ["BUSINESS", "SOFTWARE"],
+	},
+	{
+		id: "R-1040",
+		vendor: "Starbucks Coffee",
+		date: "2026-03-21",
+		amount: 12.75,
+		tags: ["FOOD", "MEETING"],
+	},
+	{
+		id: "R-1039",
+		vendor: "Office Depot",
+		date: "2026-03-18",
+		amount: 234.56,
+		tags: ["SUPPLIES", "BUSINESS"],
+	},
+	{
+		id: "R-1038",
+		vendor: "Shell Gas Station",
+		date: "2026-03-15",
+		amount: 58.32,
+		tags: ["TRANSPORTATION"],
+	},
 ];
 
 const MAX_TAG_AMOUNT = Math.max(...TAG_SPENDING.map((entry) => entry.amount));
@@ -49,9 +79,9 @@ function ChartTooltip({ active, payload, label }: TooltipProps) {
 	if (!active || !payload || payload.length === 0) return null;
 
 	return (
-		<div className="px-3 py-2 bg-[#1C1C27] border border-[#2A2A38] rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-			<p className="text-[#9CA3AF] text-xs">{label}</p>
-			<p className="text-[#7B6FFF] text-sm font-semibold mt-0.5">
+		<div className="border-2 border-[#14130F] bg-white px-3 py-2 shadow-[3px_3px_0px_#14130F]">
+			<p className="text-[#6B6660] text-xs">{label}</p>
+			<p className="text-[#FF5A00] text-sm font-bold mt-0.5">
 				${payload[0]?.value.toFixed(2)}
 			</p>
 		</div>
@@ -62,155 +92,199 @@ export function DashboardPage() {
 	return (
 		<div className="flex flex-col gap-6">
 			{/* Header */}
-			<div className="flex items-center justify-between">
-				<h1 className="text-2xl font-bold text-white">Dashboard</h1>
-				<button
-					type="button"
-					className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1C1C27] border border-[#2A2A38] text-[#D4D7DC] text-sm hover:text-white hover:border-[#7B6FFF] transition-colors"
-				>
-					<svg
-						role="img"
-						aria-label="Calendar"
-						width="14"
-						height="14"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-						<line x1="16" y1="2" x2="16" y2="6" />
-						<line x1="8" y1="2" x2="8" y2="6" />
-						<line x1="3" y1="10" x2="21" y2="10" />
-					</svg>
-					March 2026
-				</button>
-			</div>
-
-			{/* Stat card */}
-			<div className="grid grid-cols-3 gap-6">
-				<StatCard
-					icon={<DollarIcon />}
-					iconBg="from-[#7B6FFF] to-[#5B4FD4]"
-					accentColor="#7B6FFF"
-					value="$522.34"
-					label="Total Spent"
-				/>
-				<StatCard
-					icon={<ReceiptIcon />}
-					iconBg="from-[#10B981] to-[#059669]"
-					accentColor="#10B981"
-					value="5"
-					label="Receipts"
-				/>
-				<StatCard
-					icon={<TrendIcon />}
-					iconBg="from-[#F59E0B] to-[#D97706]"
-					accentColor="#F59E0B"
-					value="$104.47"
-					label="Average per Receipt"
-				/>
-			</div>
-
-			{/* Daily spending chart */}
-			<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6">
-				<h2 className="text-white font-semibold mb-6">Daily Spending</h2>
-				<ResponsiveContainer width="100%" height={280}>
-					<AreaChart
-						data={DAILY_SPENDING}
-						margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-					>
-						<defs>
-							<linearGradient id="spendGradient" x1="0" y1="0" x2="0" y2="1">
-								<stop offset="5%" stopColor="#7B6FFF" stopOpacity={0.3} />
-								<stop offset="95%" stopColor="#7B6FFF" stopOpacity={0} />
-							</linearGradient>
-						</defs>
-						<CartesianGrid
-							stroke={"#2A2A38"}
-							strokeDasharray="3 3"
-							vertical={false}
-						/>
-						<XAxis
-							dataKey="date"
-							stroke={"#6B7280"}
-							tick={{ fill: "#6B7280", fontSize: 12 }}
-							axisLine={false}
-							tickLine={true}
-						/>
-						<YAxis
-							tick={{ fill: "#6B7280", fontSize: 12 }}
-							axisLine={{ stroke: "#6B7280", strokeWidth: "0.1" }}
-							tickLine={true}
-						/>
-						<Tooltip content={<ChartTooltip />} />
-						<Area
-							type="monotone"
-							dataKey="amount"
-							stroke="#7B6FFF"
-							fill="url(#spendGradient)"
-							dot={{ fill: "#7B6FFF", r: 4, strokeWidth: 0 }}
-							activeDot={{
-								fill: "#7B6FFF",
-								r: 6,
-								strokeWidth: 2,
-								stroke: "#D9DFE7",
-							}}
-						/>
-					</AreaChart>
-				</ResponsiveContainer>
-			</div>
-
-			{/* Bottom row */}
-			<div className="grid grid-cols-2 gap-4">
-				{/* Spending by tag */}
-				<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6 flex flex-col gap-5">
+			<div className="flex items-start justify-between">
+				<div className="flex flex-col gap-1 border-l-4 border-[#FF5A00] pl-4">
 					<div className="flex items-center gap-2">
 						<svg
 							role="img"
-							aria-label="Tag"
+							aria-label="Analytics"
 							width="16"
 							height="16"
-							viewBox="0 0 22 22"
+							viewBox="0 0 24 24"
 							fill="none"
-							stroke="#9CA3AF"
+							stroke="#FF5A00"
 							strokeWidth="2"
 							strokeLinecap="round"
 							strokeLinejoin="round"
 						>
-							<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-							<line x1="7" y1="7" x2="7.01" y2="7" />
+							<line x1="18" y1="20" x2="18" y2="10" />
+							<line x1="12" y1="20" x2="12" y2="4" />
+							<line x1="6" y1="20" x2="6" y2="14" />
 						</svg>
-						<h2 className="text-white font-semibold">Spending by Tag</h2>
+						<h1 className="text-2xl font-bold tracking-widest uppercase text-[#14130F]">
+							ANALYTICS OVERVIEW
+						</h1>
 					</div>
-					<div className="flex flex-col gap-4">
-						{TAG_SPENDING.map((item) => (
-							<TagBar
-								key={item.tag}
-								tag={item.tag}
-								amount={item.amount}
-								color={item.color}
-								max={MAX_TAG_AMOUNT}
-							/>
-						))}
+					<p className="text-sm text-[#6B6660]">March 2026 • All Tags</p>
+				</div>
+
+				{/* Export button */}
+				<HardButton
+					label="EXPORT REPORT"
+					icon={
+						<svg
+							role="img"
+							aria-label="Export"
+							width="12"
+							height="12"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2.5"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+							<polyline points="14 2 14 8 20 8" />
+						</svg>
+					}
+				/>
+			</div>
+
+			{/* KPI cards */}
+
+			{/* Chart + Tag distribution */}
+			<div>
+				{/* Spend velocity chart*/}
+				<div>
+					<div />
+					<div>
+						<div>
+							<div>
+								<svg
+									role="img"
+									aria-label="Velocity"
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="#FF5A00"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+								</svg>
+								<span className="text-xs font-bold tracking-widest text-[#14130F] uppercase">
+									SPEND VELOCITY
+								</span>
+							</div>
+							{/* Time range pills */}
+							<div>
+								{["30D", "90D", "1Y"].map((r, i) => (
+									<button
+										key={r}
+										type="button"
+										className={`px-2 py-0.5 text-xs font-bold border border-[#14130F] transition-colors ${
+											i === 0
+												? "bg-[#14130F] text-white"
+												: "bg-white text-[#6B6660] hover:text-[#14130F]"
+										}`}
+									>
+										{r}
+									</button>
+								))}
+							</div>
+						</div>
+						<ResponsiveContainer>
+							<AreaChart data={DAILY_SPENDING}>
+								<defs></defs>
+								<CartesianGrid />
+								<XAxis />
+								<YAxis />
+								<Tooltip />
+								<Area
+									type="step"
+									dataKey="amount"
+									stroke="#FF5A00"
+									strokeWidth={2}
+									fill="url(#orangeGrad)"
+									dot={false}
+								/>
+							</AreaChart>
+						</ResponsiveContainer>
 					</div>
 				</div>
 
-				{/* Recent Receipts */}
-				<div className="bg-[#1C1C27] rounded-xl border border-[#2A2A38] p-6 flex flex-col gap-4">
-					<h2 className="text-white font-semibold">Recent Receipts</h2>
-					<div className="flex flex-col gap-2">
-						{RECENT_RECEIPTS.map((receipt) => (
-							<RecentReceiptRow
-								key={receipt.vendor + receipt.date + receipt.total}
-								vendor={receipt.vendor}
-								date={receipt.date}
-								total={receipt.total}
-							/>
+				{/* Tag distribution */}
+				<div>
+					<div />
+					<div>
+						<div>
+							<svg
+								role="img"
+								aria-label="Tags"
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#FF5A00"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<rect x="2" y="3" width="20" height="14" rx="2" />
+								<path d="M8 21h8M12 17v4" />
+							</svg>
+							<span className="text-xs font-bold tracking-widest text-[#14130F] uppercase">
+								TAG DISTRIBUTION
+							</span>
+						</div>
+						<div className="flex flex-col gap-4">
+							{TAG_SPENDING.map((item) => (
+								<TagBar key={item.tag} {...item} max={MAX_TAG_AMOUNT} />
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Recent transactions */}
+			<div>
+				<div />
+				<div>
+					{/* Table header */}
+					<div>
+						<div>
+							<svg
+								role="img"
+								aria-label="Recent"
+								width="14"
+								height="14"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="#FF5A00"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+							</svg>
+							<span className="text-xs font-bold tracking-widest text-[#14130F] uppercase">
+								RECENT_TRANSACTIONS
+							</span>
+						</div>
+						<button
+							type="button"
+							className="text-xs font-bold text-[#6B6660] hover:text-[#FF5A00] tracking-widest transition-colors underline underline-offset-4"
+						>
+							VIEW ALL
+						</button>
+					</div>
+
+					{/* Column headers */}
+					<div className="grid grid-cols-[80px_1fr_140px_120px_1fr_60px] gap-4 px-6 py-2 border-b border-[#E8E5DD]">
+						{["ID", "VENDOR", "DATE", "AMOUNT", "TAGS", "STATUS"].map((h) => (
+							<span
+								key={h}
+								className="text-[10px] font-bold tracking-widest text-[#6B6660] uppercase"
+							>
+								{h}
+							</span>
 						))}
 					</div>
+
+					{/* Rows */}
 				</div>
 			</div>
 		</div>
@@ -268,8 +342,8 @@ type TagBarProps = {
 	max: number;
 };
 
-function TagBar({ tag, amount, color, max }: TagBarProps) {
-	const percent = (amount / max) * 100;
+function TagBar({ tag, amount, color }: TagBarProps) {
+	const percent = (amount / MAX_TAG_AMOUNT) * 100;
 	return (
 		<div className="flex flex-col gap-1.5">
 			<div className="flex items-center justify-between">
@@ -368,5 +442,25 @@ function TrendIcon() {
 			<polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
 			<polyline points="17 6 23 6 23 12" />
 		</svg>
+	);
+}
+
+type HardButtonProps = {
+	label: string;
+	icon?: ReactNode;
+};
+
+function HardButton({ label, icon }: HardButtonProps) {
+	return (
+		<div className="relative shrink-0">
+			<div className="absolute inset-0 translate-x-[3px] translate-y-[3px] bg-[#14130F]" />
+			<button
+				type="button"
+				className="relative flex items-center gap-2 px-4 py-2 border-2 border-[#14130F] bg-white text-[#14130F] text-xs font-bold tracking-widest uppercase hover:bg-[#14130F] hover:text-white transition-colors"
+			>
+				{icon}
+				{label}
+			</button>
+		</div>
 	);
 }

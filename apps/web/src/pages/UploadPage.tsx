@@ -12,7 +12,7 @@ function PageHeader() {
 	return (
 		<div className="flex flex-col gap-1 border-l-4 border-[#FF5A00] pl-4">
 			<h1 className="text-2xl font-bold tracking-widest uppercase text-[#14130F]">
-				INGEST_DATA
+				INGEST DATA
 			</h1>
 			<p className="text-sm text-[#6B6660]">Upload receipt images or PDFs</p>
 		</div>
